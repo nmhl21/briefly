@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Briefly — messy notes in, structured brief out</title>
+    <meta
+      name="description"
+      content="Briefly turns messy notes into a structured brief — title, summary, action items and key dates — using hybrid on-device (Gemini Nano) or cloud (Gemini) inference via Firebase AI Logic."
+    />
+    <script type="module" crossorigin src="./assets/index-F5lMfcgR.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-5W97ZyGj.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-inner">
+        <div>
+          <h1>Briefly</h1>
+          <p class="tagline">Messy notes in, structured brief out.</p>
+        </div>
+        <div class="header-badges">
+          <span id="deviceBadge" class="device-badge checking" title="">Checking on-device…</span>
+        </div>
+      </div>
+      <p id="deviceDetail" class="device-detail"></p>
+    </header>
+
+    <div id="demoBanner" class="demo-banner" hidden>
+      <strong>DEMO MODE — simulated response, no Firebase call.</strong>
+      Add <code>?demo=1</code> to try the UI without a Firebase project. The brief
+      below is generated locally from your notes by a simple simulator, not by
+      Gemini. Remove the parameter to use the real Firebase AI Logic path.
+    </div>
+
+    <main class="container">
+      <section class="panel" aria-label="Notes input">
+        <label for="notes" class="field-label">Your notes</label>
+        <textarea
+          id="notes"
+          rows="12"
+          placeholder="Paste messy meeting notes, lecture notes, chat logs… anything. Briefly turns them into a title, a 3–5 point summary, action items (task, owner, due) and key dates."
+        ></textarea>
+        <div class="notes-toolbar">
+          <span id="wordCount" class="word-count">0 words</span>
+          <span class="toolbar-buttons">
+            <button id="loadShortBtn" type="button">Load sample: short meeting note</button>
+            <button id="loadLongBtn" type="button">Load sample: long lecture note</button>
+            <button id="clearBtn" type="button" class="ghost">Clear</button>
+          </span>
+        </div>
+
+        <fieldset class="mode-fieldset">
+          <legend>Inference mode</legend>
+          <label class="mode-option">
+            <input type="radio" name="mode" value="auto" checked />
+            <span><strong>Auto</strong> (recommended)</span>
+          </label>
+          <label class="mode-option">
+            <input type="radio" name="mode" value="on-device" />
+            <span><strong>On-device only</strong></span>
+          </label>
+          <label class="mode-option">
+            <input type="radio" name="mode" value="cloud" />
+            <span><strong>Cloud only</strong></span>
+          </label>
+          <p id="routingHint" class="routing-hint"></p>
+          <p class="mode-note">
+            Short notes (≤ 600 words) run on-device with Gemini Nano — private,
+            instant, free, and offline-capable. Longer notes go to cloud Gemini
+            for the bigger context window. The result badge always shows which
+            path actually ran.
+          </p>
+        </fieldset>
+
+        <button id="generateBtn" type="button" class="primary">Generate brief</button>
+        <div id="progressBar" class="progress" hidden>
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <p id="progressLabel" class="progress-label" aria-live="polite"></p>
+        <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+        <div id="setupGuide" class="setup-guide" hidden>
+          <h2>Set up Firebase AI Logic to generate real briefs</h2>
+          <p>
+            Briefly is not connected to a Firebase project yet, so it cannot call
+            Gemini. This takes about 5 minutes and stays on the free Spark plan:
+          </p>
+          <ol>
+            <li>
+              Create a project at
+              <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a>.
+            </li>
+            <li>Open <strong>Build &gt; AI Logic</strong> and click <strong>Get started</strong>.</li>
+            <li>Choose the <strong>Gemini Developer API</strong> backend.</li>
+            <li>
+              In <strong>Project settings &gt; General</strong>, copy your web app's
+              config into <code>src/firebase-config.js</code> (or set
+              <code>VITE_FIREBASE_*</code> env vars before building — see README).
+            </li>
+            <li>
+              For local development, App Check uses the debug provider: run the app
+              once, copy the debug token from the browser console, and register it
+              under <strong>App Check &gt; Apps &gt; Manage debug tokens</strong>.
+            </li>
+            <li>Reload this page and press <strong>Generate brief</strong> again.</li>
+          </ol>
+          <p class="muted">
+            No Firebase project? Add <code>?demo=1</code> to the URL to try the
+            simulated demo flow instead — no account needed.
+          </p>
+        </div>
+      </section>
+
+      <section id="result" class="panel result-panel" aria-live="polite" hidden></section>
+      <p id="copyStatus" class="copy-status" aria-live="polite"></p>
+
+      <section class="panel" aria-label="History">
+        <div class="history-head">
+          <h2>History</h2>
+          <button id="clearHistoryBtn" type="button" class="ghost">Clear history</button>
+        </div>
+        <p id="historyEmpty" class="muted">No briefs yet — generated briefs are stored locally in this browser (max 10).</p>
+        <ul id="historyList" class="history-list"></ul>
+      </section>
+
+      <footer class="app-footer">
+        <p>
+          Briefly runs hybrid inference with Firebase AI Logic: on-device Gemini
+          Nano for short notes, cloud Gemini for long ones — the same structured
+          JSON schema on both paths. Your notes never leave this page in demo
+          mode; history is stored only in your browser's localStorage.
+        </p>
+      </footer>
+    </main>
+
+  </body>
+</html>
