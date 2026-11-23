@@ -1,0 +1,1 @@
+That is hybrid inference. Short notes stay private on your device. Long notes get the power of the cloud. One SDK — Firebase AI Logic — picks the path.

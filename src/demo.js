@@ -17,6 +17,15 @@ function splitSentences(text) {
     .filter((s) => s.length > 3);
 }
 
+const OWNER_STOPWORDS = new Set([
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Sept",
+  "Oct", "Nov", "Dec", "January", "February", "March", "April", "June",
+  "July", "August", "September", "October", "November", "December",
+  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
+  "Sunday", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",
+  "We", "The", "This", "That", "Next", "Team",
+]);
+
 function extractOwner(line) {
   // "… by Sarah …", "… @sarah …", "Sarah: …", "Sarah to …"
   const m =
@@ -24,7 +33,11 @@ function extractOwner(line) {
     line.match(/@([A-Za-z][\w.]+)/) ||
     line.match(/^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s*[:–-]\s/) ||
     line.match(/\b([A-Z][a-z]+)\s+(?:to|will|should|must)\b/);
-  return m ? m[1].replace(/^@/, "") : "";
+  if (!m) return "";
+  const name = m[1].replace(/^@/, "");
+  // "by Nov 25" is a date, not a person — never report a month/weekday as owner.
+  if (OWNER_STOPWORDS.has(name.split(" ")[0])) return "";
+  return name;
 }
 
 function extractDue(line) {

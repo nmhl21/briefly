@@ -1,0 +1,1 @@
+No account, no backend, no database. Your notes stay in your browser. Pick a mode — auto, on-device only, or cloud only — and hit generate.

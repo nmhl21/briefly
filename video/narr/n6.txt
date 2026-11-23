@@ -1,0 +1,1 @@
+Under the hood: getGenerativeModel with prefer on-device, initializeDeviceModel on click, and the inference source read straight from the response. This recording uses the built-in demo mode, so you can see the routing without a Firebase project — the live path calls Firebase AI Logic directly.

@@ -1,0 +1,1 @@
+Now a long lecture note, over six hundred words. Too big for the on-device model, so Briefly falls back to Gemini in the cloud. Same JSON schema, same shape, bigger context.
