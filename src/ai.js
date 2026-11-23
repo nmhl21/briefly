@@ -22,7 +22,7 @@ import { initializeAppCheck } from "firebase/app-check";
 import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
 
 export const ON_DEVICE_WORD_LIMIT = 600;
-export const CLOUD_MODEL = "gemini-2.5-flash";
+export const CLOUD_MODEL = "gemini-3-flash-preview";
 
 /**
  * The ONE structured-output schema, used identically on both paths:
@@ -243,6 +243,11 @@ function parseBriefJson(text) {
 
 function friendlyError(err, uiMode) {
   const msg = String(err?.message || err || "Unknown error");
+  // The Firebase SDK wraps raw HTTP failures inside its message, e.g.
+  // "... [404 Not Found] ...". Surface that status so a server rejection
+  // is never disguised as a plain "Network error".
+  const statusMatch = msg.match(/\[\d{3}[^\]]*\]/);
+  const serverNote = statusMatch ? ` Server response: ${statusMatch[0]}.` : "";
   if (/api key|api-key|API_KEY|401|403|permission/i.test(msg)) {
     return "Firebase rejected the request (bad or missing API key / project not enabled for AI Logic). Check your Firebase config and that AI Logic is enabled for the Gemini Developer API.";
   }
@@ -253,9 +258,9 @@ function friendlyError(err, uiMode) {
     return "On-device model could not start; the cloud path will be tried automatically in Auto mode.";
   }
   if (/network|fetch|failed to fetch|offline/i.test(msg)) {
-    return "Network error while calling Firebase AI Logic. Check your connection and try again.";
+    return `Network error while calling Firebase AI Logic. Check your connection and try again.${serverNote}`;
   }
-  return `Brief generation failed: ${msg}`;
+  return `Brief generation failed: ${msg}${serverNote}`;
 }
 
 /**
