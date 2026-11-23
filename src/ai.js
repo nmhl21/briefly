@@ -115,13 +115,15 @@ if (typeof window !== "undefined") {
 function ensureFirebase() {
   if (firebaseApp) return;
   firebaseApp = initializeApp(firebaseConfig);
-  // App Check debug provider for local dev: the SDK uses the debug provider
-  // when self.FIREBASE_APPCHECK_DEBUG_TOKEN is set to true. The debug token
-  // is printed to the browser console on first run; register it in the
-  // Firebase console (App Check > Manage debug tokens). Failure here must
-  // never block the app — App Check may simply not be enforced.
+  // App Check debug provider for local dev. If VITE_APPCHECK_DEBUG_TOKEN
+  // is set (local .env only, never committed), the SDK uses that
+  // registered debug token; otherwise it auto-generates one and prints it
+  // to the browser console. App Check is NOT enforced in this project
+  // (left Unregistered by user decision 23 Nov 2026), so a debug token is
+  // only for local testing — never set it for a deploy build.
   try {
-    self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+    self.FIREBASE_APPCHECK_DEBUG_TOKEN =
+      import.meta.env.VITE_APPCHECK_DEBUG_TOKEN || true;
     initializeAppCheck(firebaseApp, { isTokenAutoRefreshEnabled: true });
     appCheckReady = true;
   } catch (err) {

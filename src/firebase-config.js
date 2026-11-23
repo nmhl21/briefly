@@ -13,18 +13,24 @@
 //
 // The placeholder values below ("YOUR_...") mean "not configured": the app
 // detects this and shows a friendly setup guide instead of calling Firebase.
+//
+// CONFIGURED 23 Nov 2026: real Firebase project "briefly" (Spark, free),
+// AI Logic + Gemini Developer API enabled. The values below are the web
+// app's public client identifiers — Firebase web apiKeys are public by
+// design and are meant to be embedded in client code (API restrictions
+// are enforced server-side in Google Cloud, not by hiding the key).
 
 export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "YOUR_API_KEY",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCkleH4UNWTBRwRb6zKLwpleK205HCtCxI",
   authDomain:
-    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "YOUR_PROJECT_ID",
+    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "briefly-aa68d.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "briefly-aa68d",
   storageBucket:
     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET ||
-    "YOUR_PROJECT_ID.firebasestorage.app",
+    "briefly-aa68d.firebasestorage.app",
   messagingSenderId:
-    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "YOUR_SENDER_ID",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "YOUR_APP_ID",
+    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "387585752591",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:387585752591:web:e0767723bc09469e9cad7a",
 };
 
 /** True when a real (non-placeholder) Firebase config is present. */

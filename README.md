@@ -61,9 +61,16 @@ No real Firebase credentials are committed. To enable real inference:
    npm run build
    ```
 
-4. **App Check (local dev):** the app uses the debug provider. Run it once,
-   copy the debug token printed in the browser console, and register it in
-   Firebase console → **App Check → Apps → Manage debug tokens**.
+4. **App Check (local dev):** the app uses the debug provider. A debug
+   token named `briefly-local` is already registered in Firebase console →
+   **App Check → Apps → Manage debug tokens**. For local testing, put it in
+   a local `.env` file (gitignored, never committed) as
+   `VITE_APPCHECK_DEBUG_TOKEN=...` and rebuild — the app picks it up.
+   Without it, the SDK auto-generates a token and prints it to the console.
+   App Check is **left Unregistered** (no attestation provider) by decision
+   23 Nov 2026 — the classic reCAPTCHA path is deprecated and the
+   Enterprise/Fraud Defense path needs billing, so it was skipped. Do NOT
+   set `VITE_APPCHECK_DEBUG_TOKEN` for a deploy build.
 
 Without a config, the app shows a friendly setup guide instead of calling
 Firebase — it never crashes.
